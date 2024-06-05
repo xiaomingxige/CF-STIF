@@ -288,6 +288,7 @@ def main():
                 torch.save(state, checkpoint_save_path)
 
                 if num_iter_accum >= 240000:  
+                # if num_iter_accum >= 76000:  # for QP22, QP27, QP32 and QP42
                     # validation
                     with torch.no_grad():
                         per_aver_dict = {}
