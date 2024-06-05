@@ -32,6 +32,7 @@ Please check [here](https://github.com/ryanxingql/mfqev2.0/wiki/MFQEv2-Dataset).
 #### 1.3.2 Edit YML
 You should modify `option_mfqev2_1G.yml` according to your environment
 > `1G`: 1 GPUs will be used for the below training. 
+
 > You can also edit `option_mfqev2_2G.yml` and `option_mfqev2_4G.yml` if needed.
 
 #### 1.3.3 Generate LMDB
