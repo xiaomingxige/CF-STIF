@@ -1,5 +1,5 @@
 ﻿# *Coarse-to-Fine Spatio-Temporal Information Fusion for Compressed Video Quality Enhancement* (SPL 2022)
-The PyTorch implementation for the CF-STIF: *[Coarse-to-Fine Spatio-Temporal Information Fusion for Compressed Video Quality Enhancement](https://drive.google.com/file/d/1RlFVFvP-VUMXgbbUHjLAmWarl4sEuCUR/view)* which is accepted by [IEEE SPL].
+The PyTorch implementation for the CF-STIF: *[Coarse-to-Fine Spatio-Temporal Information Fusion for Compressed Video Quality Enhancement](https://drive.google.com/file/d/1RlFVFvP-VUMXgbbUHjLAmWarl4sEuCUR/view)* which is accepted by [IEEE SPL 2022].
 ## 1. Pre-request
 ### 1.1. Environment
 ```bash
@@ -30,14 +30,9 @@ python simple_check.py
 #### 1.3.1 Download and compress videos
 Please check [here](https://github.com/ryanxingql/mfqev2.0/wiki/MFQEv2-Dataset).
 #### 1.3.2 Edit YML
-
-We now edit `option_mfqev2_1G.yml`.
-
-Suppose the folder `MFQEv2_dataset/` is placed at `/raid/xql/datasets/MFQEv2_dataset/`, then you should assign `/raid/xql/datasets/MFQEv2_dataset/` to `dataset -> train -> root` in YAML.
-
-
+You should modify `option_mfqev2_1G.yml` according to your environment
 > `1G`: 1 GPUs will be used for the below training. 
-> Similarly, you can also edit `option_mfqev2_2G.yml` and `option_mfqev2_4G.yml` if needed.
+> You can also edit `option_mfqev2_2G.yml` and `option_mfqev2_4G.yml` if needed.
 
 #### 1.3.3 Generate LMDB
 
