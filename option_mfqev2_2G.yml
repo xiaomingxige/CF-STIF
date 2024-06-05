@@ -46,7 +46,7 @@ network:
     dks: 3  # size of the deformable kernel
   
   qe:
-    in_nc: 64  # 需等于msdf的out_nc
+    in_nc: 64  
     m_nc: 64
     out_nc: 1
     bks: 3

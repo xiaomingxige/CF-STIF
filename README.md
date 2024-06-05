@@ -31,7 +31,7 @@ python simple_check.py
 Please check [here](https://github.com/ryanxingql/mfqev2.0/wiki/MFQEv2-Dataset).
 #### 1.3.2 Edit YML
 
-We now edit `option_R3_mfqev2_1G.yml`.
+We now edit `option_mfqev2_1G.yml`.
 
 Suppose the folder `MFQEv2_dataset/` is placed at `/raid/xql/datasets/MFQEv2_dataset/`, then you should assign `/raid/xql/datasets/MFQEv2_dataset/` to `dataset -> train -> root` in YAML.
 
