@@ -125,28 +125,43 @@ def main():
     model = model.to(rank)
     if opts_dict['train']['is_dist']:
         model = DDP(model, device_ids=[rank])
+
+        
+    # if opts_dict['train']['fine_tune']:  
+    #     ckp_path = opts_dict['train']['fine_tune_path']
+    #     checkpoint = torch.load(ckp_path)
+    #     if 'module.' in list(checkpoint['state_dict'].keys())[0]:  # multi-gpu training
+    #         new_state_dict = OrderedDict()
+    #         for k, v in checkpoint['state_dict'].items():
+    #             name = k[7:]  # remove module
+    #             new_state_dict[name] = v
+    #         model.load_state_dict(new_state_dict)
+    #     else:  # single-gpu training
+    #         model.load_state_dict(checkpoint['state_dict'])
+
     """
     # load pre-trained generator
-    ckp_path = opts_dict['network']['stdf']['load_path']
-    checkpoint = torch.load(ckp_path)
-    state_dict = checkpoint['state_dict']
-    if ('module.' in list(state_dict.keys())[0]) and (not opts_dict['train']['is_dist']):  # multi-gpu pre-trained -> single-gpu training
-        new_state_dict = OrderedDict()
-        for k, v in state_dict.items():
-            name = k[7:]  # remove module
-            new_state_dict[name] = v
-        model.load_state_dict(new_state_dict)
-        print(f'loaded from {ckp_path}')
-    elif ('module.' not in list(state_dict.keys())[0]) and (opts_dict['train']['is_dist']):  # single-gpu pre-trained -> multi-gpu training
-        new_state_dict = OrderedDict()
-        for k, v in state_dict.items():
-            name = 'module.' + k  # add module
-            new_state_dict[name] = v
-        model.load_state_dict(new_state_dict)
-        print(f'loaded from {ckp_path}')
-    else:  # the same way of training
-        model.load_state_dict(state_dict)
-        print(f'loaded from {ckp_path}')
+    if opts_dict['train']['fine_tune']: 
+        ckp_path = opts_dict['train']['fine_tune_path']
+        checkpoint = torch.load(ckp_path)
+        state_dict = checkpoint['state_dict']
+        if ('module.' in list(state_dict.keys())[0]) and (not opts_dict['train']['is_dist']):  # multi-gpu pre-trained -> single-gpu training
+            new_state_dict = OrderedDict()
+            for k, v in state_dict.items():
+                name = k[7:]  # remove module
+                new_state_dict[name] = v
+            model.load_state_dict(new_state_dict)
+            print(f'loaded from {ckp_path}')
+        elif ('module.' not in list(state_dict.keys())[0]) and (opts_dict['train']['is_dist']):  # single-gpu pre-trained -> multi-gpu training
+            new_state_dict = OrderedDict()
+            for k, v in state_dict.items():
+                name = 'module.' + k  # add module
+                new_state_dict[name] = v
+            model.load_state_dict(new_state_dict)
+            print(f'loaded from {ckp_path}')
+        else:  # the same way of training
+            model.load_state_dict(state_dict)
+            print(f'loaded from {ckp_path}')
     """
     # ==========
     # define loss func & optimizer & scheduler & scheduler & criterion

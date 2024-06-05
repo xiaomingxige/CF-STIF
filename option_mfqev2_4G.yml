@@ -20,7 +20,7 @@ dataset:
     enlarge_ratio: 300  # enlarge dataset by randomly cropping.
     
     # for dataloader
-    num_worker_per_gpu: 3  # 12 in total. mainly affect IO speed
+    num_worker_per_gpu: 8  # 32 in total. mainly affect IO speed
     batch_size_per_gpu: 8  # bs=32, divided by 4 GPUs
   
   val:  # Disk IO
@@ -56,10 +56,18 @@ train:
   exp_name: MFQEv2_R3_enlarge300x  # default: timestr. None: ~
   random_seed: 7
   pre-val: False  # evaluate criterion before training, e.g., ori PSNR
-  num_iter: !!float 3e+5  # 1e+5 for QP22, QP27, QP32 and QP42
+
+  num_iter: !!float 3e+5  # QP37
   interval_print: !!float 100
   interval_val: !!float 5e+3  # also save model
   pbar_len: 100
+
+  # num_iter: !!float 1e+5 # for QP22, QP27, QP32 and QP42
+  # interval_print: !!float 100  
+  # interval_val: !!float 2e+3  
+  # pbar_len: 100
+  # fine_tune: True  
+  # fine_tune_path: '.pt'
 
   optim:
     type: Adam
