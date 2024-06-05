@@ -3,15 +3,15 @@ dataset:
     type: MFQEv2Dataset
     
     # for lmdb
-    root: /home/luodengyan/Desktop/datasets/YUV
-    gt_folder: train_raw_yuv/
-    lq_folder: train_qp_yuv/QP37/
+    root: /home/luodengyan/mfqe_datasets/YUV
+    gt_folder: train_raw_yuv/      # train_108/raw/
+    lq_folder: train_qp_yuv/QP37/  # train_108/HM16.5_LDP/QP37/
     
     # for dataset
     gt_path: mfqev2_train_qp37_gt.lmdb
     lq_path: mfqev2_train_qp37_lq.lmdb
     meta_info_fp: meta_info.txt
-    gt_size: 128  # ground truth patch size: gt_size * gt_size, 改变后需要重新创建lmdb
+    gt_size: 128  # ground truth patch size: gt_size * gt_size
     use_flip: True
     use_rot: True  # rotation per 90 degrees
     random_reverse: False
@@ -20,35 +20,19 @@ dataset:
     enlarge_ratio: 300  # enlarge dataset by randomly cropping.
     
     # for dataloader
-    num_worker_per_gpu: 16  # 12 in total. mainly affect IO speed
+    num_worker_per_gpu: 6  # 12 in total. mainly affect IO speed
     batch_size_per_gpu: 16  # bs=32, divided by 4 GPUs
   
   val:  # Disk IO
     type: VideoTestMFQEv2Dataset
-    #root: /media/x/Database/MFQEv2/
-
-
 
     gt_path: test_raw_yuv/  
     lq_path: test_qp_yuv/QP37/  
-    # gt_path: test_one_raw_yuv/   
-    # lq_path: test_one_qp_yuv/QP37/   
-
-
-
-    #meta_info_fp: meta_info.txt
-    #enlarge_ratio: 1
-    #use_flip: False
-    #use_rot: False
-    #random_reverse: False
 
   test:
     type: VideoTestMFQEv2Dataset
-    gt_path: test_raw_yuv/   # test_one_raw_yuv/
-    lq_path: test_qp_yuv/QP37/  # test_one_qp_yuv/QP37/  
-
-
-
+    gt_path: test_raw_yuv/   
+    lq_path: test_qp_yuv/QP37/  
 
 
 network:
@@ -66,22 +50,15 @@ network:
     m_nc: 64
     out_nc: 1
     bks: 3
-
-
-
-
+    
 
 train:
-  exp_name: STDF+  # default: timestr. None: ~
+  exp_name: MFQEv2_R3_enlarge300x  # default: timestr. None: ~
   random_seed: 7
-  pre-val: False  # False, True  # evaluate criterion before training, e.g., ori PSNR
-
-  num_iter: !!float 3e+5  # 10  一共2e+5迭代周期，设置为100即小的值可以快速验证cuda是否够用
-  interval_print: !!float 100  # 10  每100轮打印一次
-  interval_val: !!float 5e+3  # 10  5e+3个迭代周期验证一次模型同时保存模型
-
-
-  
+  pre-val: False  # evaluate criterion before training, e.g., ori PSNR
+  num_iter: !!float 100  # 3e+5
+  interval_print: !!float 100
+  interval_val: !!float 100  # 5e+3  # also save model
   pbar_len: 100
 
   optim:
@@ -107,7 +84,7 @@ train:
 
 
 test:
-  restore_iter: !!float 265000 
+  restore_iter: !!float 200000
   pbar_len: 100
 
   criterion:

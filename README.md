@@ -1,15 +1,14 @@
-﻿# *Omniscient Network for Compressed Video Quality Enhancement* (SPL 2022)
+﻿# *Coarse-to-Fine Spatio-Temporal Information Fusion for Compressed Video Quality Enhancement* (SPL 2022)
 The PyTorch implementation for the CF-STIF: *[Coarse-to-Fine Spatio-Temporal Information Fusion for Compressed Video Quality Enhancement](https://drive.google.com/file/d/1RlFVFvP-VUMXgbbUHjLAmWarl4sEuCUR/view)* which is accepted by [IEEE SPL].
 ## 1. Pre-request
 ### 1.1. Environment
 ```bash
 conda create -n CF-STIF python=3.10.11
 conda activate CF-STIF
-
-git clone --depth=1 https://github.com/xiaomingxige/CF-STIF cd CF-STIF
-
 conda install pytorch==1.12.0 torchvision==0.13.0 torchaudio==0.12.0 cudatoolkit=11.3 -c pytorch
 
+git clone --depth=1 https://github.com/xiaomingxige/CF-STIF
+cd CF-STIF
 pip install -r requirements.txt
 ```
 ### 1.2. DCNv2
@@ -17,6 +16,7 @@ pip install -r requirements.txt
 
 ```bash
 cd ops/dcn/
+# You may need to modify the paths of cuda before compiling.
 bash build.sh
 ```
 #### Check if DCNv2 works (optional)
@@ -35,33 +35,18 @@ We now edit `option_R3_mfqev2_1G.yml`.
 
 Suppose the folder `MFQEv2_dataset/` is placed at `/raid/xql/datasets/MFQEv2_dataset/`, then you should assign `/raid/xql/datasets/MFQEv2_dataset/` to `dataset -> train -> root` in YAML.
 
-> `R3`: one of the network structures provided in the paper; 
-`mfqev2`: MFQEv2 dataset will be adopted; 
-> `4G`: 4 GPUs will be used for the below training. 
-> Similarly, you can also edit `option_R3_mfqev2_2G.yml` and `option_R3_mfqev2_4G.yml` if needed.
+
+> `1G`: 1 GPUs will be used for the below training. 
+> Similarly, you can also edit `option_mfqev2_2G.yml` and `option_mfqev2_4G.yml` if needed.
 
 #### 1.3.3 Generate LMDB
 
 We now generate LMDB to speed up IO during training.
 
 ```bash
-python create_lmdb_mfqev2.py --opt_path option_R3_mfqev2_1G.yml
+python create_lmdb_mfqev2.py --opt_path option_mfqev2_1G.yml
 ```
-Now you will get all needed data:
 
-```txt
-MFQEv2_dataset/
-├── train_108/
-│   ├── raw/
-│   └── HM16.5_LDP/
-│       └── QP37/
-├── test_18/
-│   ├── raw/
-│   └── HM16.5_LDP/
-│       └── QP37/
-├── mfqev2_train_gt.lmdb/
-└── mfqev2_train_lq.lmdb/
-```
 
 Finally, the MFQEv2 dataset root will be sym-linked to the folder `./data/` automatically.
 

@@ -3,7 +3,7 @@ dataset:
     type: MFQEv2Dataset
     
     # for lmdb
-    root: /home/luodengyan/Desktop/datasets/YUV
+    root: /home/luodengyan/mfqe_datasets/YUV
     gt_folder: train_raw_yuv/      # train_108/raw/
     lq_folder: train_qp_yuv/QP37/  # train_108/HM16.5_LDP/QP37/
     
@@ -20,28 +20,19 @@ dataset:
     enlarge_ratio: 300  # enlarge dataset by randomly cropping.
     
     # for dataloader
-    num_worker_per_gpu: 12  # 12 in total. mainly affect IO speed
-    batch_size_per_gpu: 32  # bs=32, divided by 4 GPUs
+    num_worker_per_gpu: 3  # 12 in total. mainly affect IO speed
+    batch_size_per_gpu: 8  # bs=32, divided by 4 GPUs
   
   val:  # Disk IO
     type: VideoTestMFQEv2Dataset
-    #root: /media/x/Database/MFQEv2/
 
-    # gt_path: test_raw_yuv/  
-    # lq_path: test_qp_yuv/QP37/  
-    gt_path: test_one_raw_yuv/   
-    lq_path: test_one_qp_yuv/QP37/  
-
-    #meta_info_fp: meta_info.txt
-    #enlarge_ratio: 1
-    #use_flip: False
-    #use_rot: False
-    #random_reverse: False
+    gt_path: test_raw_yuv/  
+    lq_path: test_qp_yuv/QP37/  
 
   test:
     type: VideoTestMFQEv2Dataset
-    gt_path: test_raw_yuv/   # test_one_raw_yuv/
-    lq_path: test_qp_yuv/QP37/  # test_one_qp_yuv/QP37/ 
+    gt_path: test_raw_yuv/   
+    lq_path: test_qp_yuv/QP37/  
 
 
 network:
