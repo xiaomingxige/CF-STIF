@@ -286,45 +286,47 @@ def main():
                 if opts_dict['train']['scheduler']['is_on']:
                     state['scheduler'] = scheduler.state_dict()
                 torch.save(state, checkpoint_save_path)
-                # validation
-                with torch.no_grad():
-                    per_aver_dict = {}
-                    for index_vid in range(vid_num):
-                        per_aver_dict[index_vid] = utils.Counter()  
-                    pbar = tqdm(total=val_num, ncols=opts_dict['train']['pbar_len'])
-                    # train -> eval
-                    model.eval()
-                    # fetch the first batch
-                    val_prefetcher.reset()
-                    val_data = val_prefetcher.next()
-                    while val_data is not None:
-                        # get data
-                        gt_data = val_data['gt'].to(rank)  # (B [RGB] H W)
-                        lq_data = val_data['lq'].to(rank)  # (B T [RGB] H W)
-                        index_vid = val_data['index_vid'].item()
-                        name_vid = val_data['name_vid'][0]  # bs must be 1!
-                        b, _, c, _, _  = lq_data.shape
-                        input_data = torch.cat([lq_data[:,:,i,...] for i in range(c)], dim=1)  # B [R1 ... R7 G1 ... G7 B1 ... B7] H W
-                        enhanced_data = model(input_data)  # (B [RGB] H W)
-                        # eval
-                        batch_perf = np.mean([criterion(enhanced_data[i], gt_data[i]) for i in range(b)]) # bs must be 1!
-                        # display
-                        pbar.set_description("{:s}: [{:.3f}] {:s}".format(name_vid, batch_perf, unit))
-                        pbar.update()
-                        # log
-                        per_aver_dict[index_vid].accum(volume=batch_perf)
-                        # fetch next batch
+
+                if num_iter_accum >= 240000:  
+                    # validation
+                    with torch.no_grad():
+                        per_aver_dict = {}
+                        for index_vid in range(vid_num):
+                            per_aver_dict[index_vid] = utils.Counter()  
+                        pbar = tqdm(total=val_num, ncols=opts_dict['train']['pbar_len'])
+                        # train -> eval
+                        model.eval()
+                        # fetch the first batch
+                        val_prefetcher.reset()
                         val_data = val_prefetcher.next()
-                    # end of val
-                    pbar.close()
-                    # eval -> train
-                    model.train()
-                # log
-                ave_per = np.mean([per_aver_dict[index_vid].get_ave() for index_vid in range(vid_num)])
-                msg = ("> model saved at {:s}\n" "> ave val per: [{:.3f}] {:s}").format(checkpoint_save_path, ave_per, unit)
-                print(msg)
-                log_fp.write(msg + '\n')
-                log_fp.flush()
+                        while val_data is not None:
+                            # get data
+                            gt_data = val_data['gt'].to(rank)  # (B [RGB] H W)
+                            lq_data = val_data['lq'].to(rank)  # (B T [RGB] H W)
+                            index_vid = val_data['index_vid'].item()
+                            name_vid = val_data['name_vid'][0]  # bs must be 1!
+                            b, _, c, _, _  = lq_data.shape
+                            input_data = torch.cat([lq_data[:,:,i,...] for i in range(c)], dim=1)  # B [R1 ... R7 G1 ... G7 B1 ... B7] H W
+                            enhanced_data = model(input_data)  # (B [RGB] H W)
+                            # eval
+                            batch_perf = np.mean([criterion(enhanced_data[i], gt_data[i]) for i in range(b)]) # bs must be 1!
+                            # display
+                            pbar.set_description("{:s}: [{:.3f}] {:s}".format(name_vid, batch_perf, unit))
+                            pbar.update()
+                            # log
+                            per_aver_dict[index_vid].accum(volume=batch_perf)
+                            # fetch next batch
+                            val_data = val_prefetcher.next()
+                        # end of val
+                        pbar.close()
+                        # eval -> train
+                        model.train()
+                    # log
+                    ave_per = np.mean([per_aver_dict[index_vid].get_ave() for index_vid in range(vid_num)])
+                    msg = ("> model saved at {:s}\n" "> ave val per: [{:.3f}] {:s}").format(checkpoint_save_path, ave_per, unit)
+                    print(msg)
+                    log_fp.write(msg + '\n')
+                    log_fp.flush()
             if opts_dict['train']['is_dist']:
                 torch.distributed.barrier()  # all processes wait for ending
             # fetch next batch
