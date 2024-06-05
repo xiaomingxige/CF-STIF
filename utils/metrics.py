@@ -1,4 +1,4 @@
-import skimage.metrics as skm  # 对于不同python版本用不同的包，python -- version > 3.5
+import skimage.metrics as skm  
 # import skimage.measure as skm  # 
 
 def calculate_psnr(img0, img1, data_range=None):

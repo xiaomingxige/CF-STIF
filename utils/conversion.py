@@ -277,7 +277,7 @@ def augment(imgs, hflip=True, rotation=True, flows=None):
         """
         assert direction in ['horizontal', 'vertical', 'diagonal']
         if direction == 'horizontal':
-            return cv2.flip(img, 1, img)  # 等价于img = cv2.flip(img, 1)
+            return cv2.flip(img, 1, img)  
         elif direction == 'vertical':
             return cv2.flip(img, 0, img)
         else:
