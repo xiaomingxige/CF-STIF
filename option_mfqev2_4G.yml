@@ -56,9 +56,9 @@ train:
   exp_name: MFQEv2_R3_enlarge300x  # default: timestr. None: ~
   random_seed: 7
   pre-val: False  # evaluate criterion before training, e.g., ori PSNR
-  num_iter: !!float 100  # 3e+5
+  num_iter: !!float 3e+5
   interval_print: !!float 100
-  interval_val: !!float 100  # 5e+3  # also save model
+  interval_val: !!float 5e+3  # also save model
   pbar_len: 100
 
   optim:
