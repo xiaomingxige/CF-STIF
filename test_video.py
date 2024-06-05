@@ -15,35 +15,6 @@ def get_h_w_f(filename):
     return height, width, frame_nums
 
 
-from PIL import Image
-from numpy import *
-def yuv2rgb(Y, U, V):
-    height, width = (Y.shape)
-    U = np.array(Image.fromarray(U).resize((width, height)))
-    V = np.array(Image.fromarray(V).resize((width, height)))
-    rf = Y + 1.4075 * (V - 128.0)
-    gf = Y - 0.3455 * (U - 128.0) - 0.7169 * (V - 128.0)
-    bf = Y + 1.7790 * (U - 128.0)
-    for m in range(height):
-        for n in range(width):
-            if(rf[m, n] > 255):
-                rf[m, n] = 255
-            if(gf[m, n] > 255):
-                gf[m, n] = 255
-            if(bf[m, n] > 255):
-                bf[m, n] = 255
-            if (rf[m, n] < 0):
-                rf[m, n] = 0
-            if (gf[m, n] < 0):
-                gf[m, n] = 0
-            if (bf[m, n] < 0):
-                bf[m, n] = 0
-    r = rf.astype(uint8)
-    g = gf.astype(uint8)
-    b = bf.astype(uint8)
-    return r, g, b
-
-
 ckp_path = './exp/QP37/ckp_255000.pt'  # trained at QP37, LDP, HM16.5
 
 
