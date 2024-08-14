@@ -1,5 +1,5 @@
 ﻿# *Coarse-to-Fine Spatio-Temporal Information Fusion for Compressed Video Quality Enhancement* (SPL 2022)
-The PyTorch implementation for the CF-STIF: *[Coarse-to-Fine Spatio-Temporal Information Fusion for Compressed Video Quality Enhancement](https://drive.google.com/file/d/1RlFVFvP-VUMXgbbUHjLAmWarl4sEuCUR/view)* which is accepted by [IEEE SPL 2022].
+The PyTorch implementation for the CF-STIF: *[Coarse-to-Fine Spatio-Temporal Information Fusion for Compressed Video Quality Enhancement](https://ieeexplore.ieee.org/abstract/document/9699019)* which is accepted by [IEEE SPL 2022].
 ## 1. Pre-request
 ### 1.1. Environment
 ```bash
